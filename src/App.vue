@@ -1,23 +1,21 @@
 <template>
-    <div id="app">
-        <nav>
-            <ul>
-                <li>
-                    <router-link to="/home">Home</router-link>
-                </li>
-            </ul>
-        </nav>
-        <router-view></router-view>
-    </div>
+    <v-app>
+        <app-navbar />
+        <v-content>
+            <v-app>
+                <router-view></router-view>
+            </v-app>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld.vue";
+import AppNavBar from "./components/AppNavBar";
 
 export default {
     name: "App",
     components: {
-        // HelloWorld
+        "app-navbar": AppNavBar
     }
 };
 </script>
@@ -29,6 +27,11 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    background: #1e1e1e;
+}
+
+.trivia-navbar {
+    border-bottom: 2px solid #c77d4e;
+    box-shadow: none;
 }
 </style>

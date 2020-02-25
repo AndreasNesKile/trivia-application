@@ -1,18 +1,14 @@
 import Vue from "vue";
 import App from "./App.vue";
-import VueRouter from "vue-router";
-
-import HelloWorld from "./components/HelloWorld.vue";
+import vuetify from "./plugins/vuetify";
+import router from "./router";
 
 Vue.config.productionTip = false;
 
-Vue.use(VueRouter);
-
-const routes = [{ path: "/home", component: HelloWorld }];
-
-const router = new VueRouter({ routes });
+Vue.use(router);
 
 new Vue({
     router,
+    vuetify,
     render: h => h(App)
 }).$mount("#app");
