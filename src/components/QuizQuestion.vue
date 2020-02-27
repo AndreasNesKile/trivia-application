@@ -31,6 +31,7 @@
 
 <script>
 export default {
+  name: "quiz-question",
   props: {
     question: {
       type: Object
@@ -56,9 +57,8 @@ export default {
         selectedAnswer: this.selectedAnswer,
         correctAnswer: this.correctAnswer,
         incorrectAnswers: this.question.incorrect_answers,
-        hasAnswered: true
+        didAnswer: true
       };
-
       this.$emit("answer", this.answerFromUser);
     }
   },
@@ -69,7 +69,8 @@ export default {
       this.question.correct_answer
     ];
     this.answers.sort();
-    this.correctAnswer = this.question.correct_answer;
+    this.correctAnswer = this.$props.question.correct_answer;
+    this.hasAnswered = this.$props.hasAnswered;
   },
 
   watch: {
@@ -79,8 +80,7 @@ export default {
         this.question.correct_answer
       ];
       this.answers.sort();
-      this.correctAnswer = this.question.correct_answer;
-      this.hasAnswered = false;
+      this.correctAnswer = this.$props.question.correct_answer;
       this.isActive = true;
     }
   }

@@ -1,76 +1,44 @@
 <template>
-  <div>
+  <v-container>
     <h1 style="color: white">GAME OVER</h1>
     <br />
     <br />
-    <h2 style="color: white">You received a total score of: {{ this.$props.score }} / 100</h2>
+    <h2 style="color: white">You received a total score of: {{ setScore }} / {{ setMaxScore}}</h2>
     <br />
-    <v-timeline dark>
-      <v-timeline-item
-        light
-        v-for="(currentQuestion, index) in answeredQuestions"
-        :key="index"
-        fill-dot
-        :icon="index = 1"
-      >
-        <v-card class="elevation-2" style="color: grey">
-          <v-card-title class="headline" v-html="currentQuestion.questions"></v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
-                v-for="(option, optionIndex) in currentQuestion.options"
-                :key="optionIndex"
-                xl="6"
-                md="6"
-                l="6"
-                sm="12"
-                xs="12"
-              >
-                <v-card>
-                  <v-card-text v-html="option" :class="setCardClass(option, index, optionIndex)"></v-card-text>
-                </v-card>
-              </v-col>
-              <v-col>
-                Your Answer:
-                <h2 v-html="currentQuestion.selectedAnswer"></h2>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-timeline-item>
-    </v-timeline>
-  </div>
+
+    <quiz-results :answeredQuestions="setAnsweredQuestions" />
+
+    <br />
+    <v-btn class="primary">
+      <router-link class="router-link white--text" to="quiz">Play again</router-link>
+    </v-btn>
+  </v-container>
 </template>
 
 <script>
+import QuizResults from "./QuizResults";
+
 export default {
-  props: {
-    score: Number,
-    answeredQuestions: Array
+  name: "game-over",
+  components: {
+    "quiz-results": QuizResults
   },
   data() {
     return {
-      questions: [],
-      correctAnswer: ""
+      questions: []
     };
   },
 
   computed: {
-    setCorrectAnswer: function(index) {
-      return this.questions[index].correctAnswer;
+    setScore() {
+      return this.$route.params.score;
+    },
+    setMaxScore() {
+      return this.$route.params.maxScore;
+    },
+    setAnsweredQuestions() {
+      return this.$route.params.answeredQuestions;
     }
-  },
-
-  methods: {
-    setCardClass: function(option, index) {
-      if (option == this.questions[index].correctAnswer) {
-        return "card-option";
-      }
-    }
-  },
-
-  created() {
-    this.questions = this.answeredQuestions;
   },
 
   watch: {
@@ -88,5 +56,9 @@ export default {
 <style scoped>
 .card-option {
   background-color: green;
+}
+
+.router-link {
+  text-decoration: none !important;
 }
 </style>

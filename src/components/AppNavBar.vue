@@ -1,9 +1,9 @@
 <template>
-  <v-app-bar dark dense class="trivia-navbar">
+  <v-app-bar dark dense app class="red trivia-navbar">
     <v-toolbar-title class="hidden-sm-and-down trivia-logo">Trivia Quiz</v-toolbar-title>
     <v-toolbar-items>
-      <router-link to="/">
-        <v-btn class="normal">Home</v-btn>
+      <router-link to="/" class="router-link">
+        <v-btn class="menu-button outline">Menu</v-btn>
       </router-link>
     </v-toolbar-items>
   </v-app-bar>
@@ -13,11 +13,10 @@
 export default {};
 </script>
 
-<style scoped>
+<style>
 .trivia-navbar {
   border-bottom: 2px solid #c77d4e;
   box-shadow: none;
-  background-color: #212529 !important;
 }
 
 .main-content {
@@ -26,5 +25,13 @@ export default {};
 
 .trivia-logo {
   margin-right: 10px;
+}
+
+.menu-button {
+  margin-top: 6px;
+}
+
+.router-link {
+  text-decoration: none !important;
 }
 </style>

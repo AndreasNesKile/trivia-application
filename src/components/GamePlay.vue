@@ -1,31 +1,19 @@
 <template>
-  <div>
-    <v-container v-if="!quizFinished">
-      <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
-      <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
-    </v-container>
-
-    <v-container v-else>
-      <game-over :score="score" :answeredQuestions="answeredQuestions" />
-      <br />
-      <router-link to="/">
-        <v-btn class="primary">Play again?</v-btn>
-      </router-link>
-    </v-container>
-  </div>
+  <v-container class="fill height" v-if="!quizFinished">
+    <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
+    <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
+  </v-container>
 </template>
 
 <script>
 import QuizQuestion from "./QuizQuestion";
-import GameOver from "./GameOver";
 import toastr from "toastr";
 import axios from "axios";
 
 export default {
   name: "quiz-main-page",
   components: {
-    "quiz-question": QuizQuestion,
-    "game-over": GameOver
+    "quiz-question": QuizQuestion
   },
 
   data() {
@@ -34,7 +22,8 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       countDown: 10,
-      answeredQuestions: []
+      answeredQuestions: [],
+      numberOfQuestions: 0
     };
   },
 
@@ -43,6 +32,7 @@ export default {
       // min and max included
       return Math.floor(Math.random() * (max - min + 1) + min);
     },
+
     updateGamePlay(event) {
       this.answeredQuestions.push(event);
       this.currentQuestionIndex++;
@@ -53,9 +43,6 @@ export default {
       }
       this.countDown = 10;
     },
-    handleTimeBar(event) {
-      console.log(event.target);
-    },
 
     countDownTimer() {
       if (this.countDown > 0) {
@@ -63,6 +50,21 @@ export default {
           this.countDown -= 1;
           this.countDownTimer();
         }, 1000);
+      }
+    },
+
+    hasAnsweredQuestion() {
+      if (!this.answeredQuestions[this.currentQuestionIndex]) {
+        this.answeredQuestions.push({
+          question: this.questions[this.currentQuestionIndex].question,
+          options: [
+            this.questions[this.currentQuestionIndex].correct_answer,
+            ...this.questions[this.currentQuestionIndex].incorrect_answers
+          ],
+          didAnswer: false,
+          correct_answer: this.questions[this.currentQuestionIndex]
+            .correct_answer
+        });
       }
     }
   },
@@ -79,11 +81,11 @@ export default {
   },
 
   mounted() {
-    let numberOfQuestions = this.randomIntFromInterval(2, 3);
+    this.numberOfQuestions = this.randomIntFromInterval(2, 3);
     this.currentQuestionIndex = 0;
 
     axios
-      .get(`https://opentdb.com/api.php?amount=${numberOfQuestions}`)
+      .get(`https://opentdb.com/api.php?amount=${this.numberOfQuestions}`)
       .then(response => {
         this.questions = response.data.results;
         if (this.questions) {
@@ -100,18 +102,35 @@ export default {
       });
     this.countDownTimer();
   },
+
   watch: {
     countDown: function() {
-      if (!this.quizFinished) {
-        if (this.countDown == 0) {
-          this.currentQuestionIndex++;
-          this.countDown = 10;
-          this.countDownTimer();
-        }
+      if (!this.quizFinished && this.countDown == 0) {
+        this.hasAnsweredQuestion();
+        this.currentQuestionIndex++;
+        this.countDown = 10;
+        this.countDownTimer();
+      }
+
+      if (this.quizFinished) {
+        this.$router.push({
+          name: "results",
+          params: {
+            questions: this.answeredQuestions,
+            score: this.score,
+            maxScore: this.numberOfQuestions * 10,
+            answeredQuestions: this.answeredQuestions
+          }
+        });
       }
     }
   }
 };
 </script>
 
-<style></style>
+<style>
+.trivia-navbar {
+  border-bottom: 2px solid #c77d4e;
+  box-shadow: none;
+}
+</style>

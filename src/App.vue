@@ -1,11 +1,16 @@
 <template>
   <v-app>
     <app-navbar />
+
     <v-content>
-      <v-app>
+      <v-container class="fill-height">
         <router-view></router-view>
-      </v-app>
+      </v-container>
     </v-content>
+
+    <v-footer class="app red text-center white--text justify-center">
+      <span>© 2020 — Andreas Nes Kile</span>
+    </v-footer>
   </v-app>
 </template>
 
@@ -33,5 +38,6 @@ export default {
 .trivia-navbar {
   border-bottom: 2px solid #c77d4e;
   box-shadow: none;
+  background-color: #212529 !important;
 }
 </style>
