@@ -1,19 +1,31 @@
 <template>
-  <v-container v-if="questions.length > 0">
-    <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
-    <quiz-question v-on:answer="validateQuestion" :question="questions[currentQuestionIndex]" />
-  </v-container>
+  <div>
+    <v-container v-if="!quizFinished">
+      <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
+      <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
+    </v-container>
+
+    <v-container v-else>
+      <game-over :score="score" :answeredQuestions="answeredQuestions" />
+      <br />
+      <router-link to="/">
+        <v-btn class="primary">Play again?</v-btn>
+      </router-link>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import QuizQuestion from "./QuizQuestion.vue";
+import QuizQuestion from "./QuizQuestion";
+import GameOver from "./GameOver";
 import toastr from "toastr";
 import axios from "axios";
 
 export default {
   name: "quiz-main-page",
   components: {
-    "quiz-question": QuizQuestion
+    "quiz-question": QuizQuestion,
+    "game-over": GameOver
   },
 
   data() {
@@ -21,7 +33,6 @@ export default {
       questions: [],
       currentQuestionIndex: 0,
       score: 0,
-      hasAnswered: false,
       countDown: 10,
       answeredQuestions: []
     };
@@ -32,21 +43,20 @@ export default {
       // min and max included
       return Math.floor(Math.random() * (max - min + 1) + min);
     },
-    validateQuestion(event) {
-      if (event.selectedAnswerIndex === event.correctAnswerIndex) {
-        this.score += 10;
-      }
+    updateGamePlay(event) {
+      this.answeredQuestions.push(event);
       this.currentQuestionIndex++;
-      this.countDown = 10;
-      console.log(event);
-    },
-    checkCorrectAnswer() {
-      if (this.selectedAnswer == this.correctAnswer) {
-        this.colorOfAnswer = "success";
-      } else {
-        console.log();
+      if (this.quizFinished) {
+        if (event.selectedAnswer === event.correctAnswer) {
+          this.score += 10;
+        }
       }
+      this.countDown = 10;
     },
+    handleTimeBar(event) {
+      console.log(event.target);
+    },
+
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -62,11 +72,14 @@ export default {
     },
     currentTimer: function() {
       return this.countDown;
+    },
+    quizFinished() {
+      return this.currentQuestionIndex == this.questions.length;
     }
   },
 
   mounted() {
-    let numberOfQuestions = this.randomIntFromInterval(10, 20);
+    let numberOfQuestions = this.randomIntFromInterval(2, 3);
     this.currentQuestionIndex = 0;
 
     axios
@@ -80,15 +93,23 @@ export default {
               question.correct_answer
             );
           });
-          this.correctAnswer = this.answers.indexOf(
-            this.question.correct_answer
-          );
         }
       })
       .catch(error => {
-        toastr.error("ERROR", "Could not fetch questions from API", error);
+        toastr.error("ERROR", `Could not fetch questions from API: ${error}`);
       });
     this.countDownTimer();
+  },
+  watch: {
+    countDown: function() {
+      if (!this.quizFinished) {
+        if (this.countDown == 0) {
+          this.currentQuestionIndex++;
+          this.countDown = 10;
+          this.countDownTimer();
+        }
+      }
+    }
   }
 };
 </script>

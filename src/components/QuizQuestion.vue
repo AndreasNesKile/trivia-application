@@ -1,20 +1,27 @@
 <template>
   <v-card>
-    <v-card-title v-if="question">
-      <span>{{ question.question}}</span>
-      <v-spacer></v-spacer>
-      <h4>{{question.category}}</h4>
-    </v-card-title>
+    <v-row>
+      <v-col lg="12">
+        <h4 v-html="question.category"></h4>
+      </v-col>
+    </v-row>
+    <v-spacer></v-spacer>
+    <v-row>
+      <v-col>
+        <span v-html="question.question"></span>
+      </v-col>
+    </v-row>
+    <v-spacer></v-spacer>
     <v-card-text>
       <v-row>
         <v-col v-for="(answer,index) in answers" :key="index" xl="6" md="6" l="6" sm="12" xs="12">
           <v-card
             :disabled="!isActive"
-            class="quiz-card-container elevation-3 disabled answer-card"
+            class="quiz-card-container elevation-5 answer-card"
             :id="'answer-option-' + question"
             @click="sendAnswer($event)"
           >
-            <v-card-text>{{ answer }}</v-card-text>
+            <v-card-text v-html="answer"></v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -32,7 +39,7 @@ export default {
   data() {
     return {
       answers: [],
-      selectedAnswerIndex: 0,
+      selectedAnswer: "",
       answerFromUser: {},
       correctAnswer: "",
       isActive: true
@@ -41,24 +48,15 @@ export default {
 
   methods: {
     sendAnswer(event) {
-      // let backgroundColor = "";
-
-      // event.target.innerText == this.correctAnswer
-      //   ? (backgroundColor = "green")
-      //   : (backgroundColor = "red");
-
-      // event.srcElement.style.backgroundColor = backgroundColor;
       this.isActive = false;
-
-      this.selectedAnswerIndex = this.answers.indexOf(event.target.innerText);
-
+      this.selectedAnswer = event.target.innerText;
       this.answerFromUser = {
-        selectedAnswerIndex: this.selectedAnswerIndex,
-        correctAnswerIndex: this.answers.indexOf(this.correctAnswer),
-        answers: this.answers,
-        hasAnswered: true,
+        question: this.question.question,
+        options: this.answers,
+        selectedAnswer: this.selectedAnswer,
         correctAnswer: this.correctAnswer,
-        questions: this.question
+        incorrectAnswers: this.question.incorrect_answers,
+        hasAnswered: true
       };
 
       this.$emit("answer", this.answerFromUser);
