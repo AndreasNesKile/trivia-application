@@ -20,7 +20,7 @@ Current game ongoing with questions and different options
 
 Display of results after the game is finished
 
-![Game Results](/src/assets/GameResults.PNG)
+![Game Results](/src/assets/Results.PNG)
 
 Bottom of result page
 
