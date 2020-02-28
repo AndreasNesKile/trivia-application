@@ -50,11 +50,10 @@ export default {
   methods: {
     sendAnswer(event) {
       this.isActive = false;
-      this.selectedAnswer = event.target.innerText;
       this.answerFromUser = {
         question: this.question.question,
         options: this.answers,
-        selectedAnswer: this.selectedAnswer,
+        selectedAnswer: event.target.innerText,
         correctAnswer: this.correctAnswer,
         incorrectAnswers: this.question.incorrect_answers,
         didAnswer: true

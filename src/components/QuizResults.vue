@@ -1,8 +1,8 @@
-<template v-if="quizQuestions.length > 0">
+<template>
   <v-timeline dark>
     <v-timeline-item
       light
-      v-for="(currentQuestion, index) in quizQuestions"
+      v-for="(currentQuestion, index) in setAnsweredQuestions"
       :key="index"
       fill-dot
       :icon="(index + 1).toString()"
@@ -10,7 +10,7 @@
       <v-card class="elevation-2" style="color: grey">
         <v-card-title style="font-size: 1em" v-html="currentQuestion.question"></v-card-title>
         <v-card-text>
-          <v-row>
+          <v-row v-if="currentQuestion.options">
             <v-col
               v-for="(option, optionIndex) in currentQuestion.options"
               :key="optionIndex"
@@ -25,9 +25,9 @@
               </v-card>
             </v-col>
             <v-col>
-              Your Answer:
-              <h2 v-html="currentQuestion.selectedAnswer" v-if="currentQuestion.didAnswer"></h2>
-              <h2 v-else>No answer were given</h2>
+              <h1>Your Answer:</h1>
+              <h3 v-html="currentQuestion.selectedAnswer" v-if="currentQuestion.didAnswer"></h3>
+              <h3 v-else>No answer were given</h3>
             </v-col>
           </v-row>
         </v-card-text>
@@ -49,25 +49,9 @@ export default {
     }
   },
 
-  data() {
-    return {
-      quizQuestions: this.answeredQuestions
-    };
-  },
-
-  beforeMount() {
-    this.quizQuestions = this.$route.params.answeredQuestions;
-  },
-
-  created: function() {
-    if (this.quizQuestions) this.dataLoaded = true;
-  },
-
   methods: {
-    setCardClass: function(option, index, optionIndex) {
-      console.log(index);
-      console.log(optionIndex);
-      if (option == this.questions[index].correctAnswer) {
+    setCardClass: function(option, index) {
+      if (option == this.setAnsweredQuestions[index].correctAnswer) {
         return "card-option";
       }
     }

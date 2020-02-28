@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill height" v-if="!quizFinished">
+  <v-container class="fill height" v-if="questions.length > 0">
     <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
     <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
   </v-container>
@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       questions: [],
+      answers: [],
       currentQuestionIndex: 0,
       score: 0,
       countDown: 10,
@@ -36,10 +37,8 @@ export default {
     updateGamePlay(event) {
       this.answeredQuestions.push(event);
       this.currentQuestionIndex++;
-      if (this.quizFinished) {
-        if (event.selectedAnswer === event.correctAnswer) {
-          this.score += 10;
-        }
+      if (event.selectedAnswer === event.correctAnswer) {
+        this.score += 10;
       }
       this.countDown = 10;
     },
@@ -62,7 +61,7 @@ export default {
             ...this.questions[this.currentQuestionIndex].incorrect_answers
           ],
           didAnswer: false,
-          correct_answer: this.questions[this.currentQuestionIndex]
+          correctAnswer: this.questions[this.currentQuestionIndex]
             .correct_answer
         });
       }
@@ -81,9 +80,8 @@ export default {
   },
 
   mounted() {
-    this.numberOfQuestions = this.randomIntFromInterval(2, 3);
+    this.numberOfQuestions = this.randomIntFromInterval(10, 20);
     this.currentQuestionIndex = 0;
-
     axios
       .get(`https://opentdb.com/api.php?amount=${this.numberOfQuestions}`)
       .then(response => {
@@ -98,6 +96,7 @@ export default {
         }
       })
       .catch(error => {
+        console.log(error);
         toastr.error("ERROR", `Could not fetch questions from API: ${error}`);
       });
     this.countDownTimer();

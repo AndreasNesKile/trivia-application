@@ -8,6 +8,7 @@
 
     <quiz-results :answeredQuestions="setAnsweredQuestions" />
 
+    <v-divider dark></v-divider>
     <br />
     <v-btn class="primary">
       <router-link class="router-link white--text" to="quiz">Play again</router-link>
