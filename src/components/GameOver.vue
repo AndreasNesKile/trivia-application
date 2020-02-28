@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1 style="color: white">GAME OVER</h1>
+    <h1 style="color: white">RESULTS</h1>
     <br />
     <br />
     <h2 style="color: white">You received a total score of: {{ setScore }} / {{ setMaxScore}}</h2>

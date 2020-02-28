@@ -23,17 +23,11 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       countDown: 10,
-      answeredQuestions: [],
-      numberOfQuestions: 0
+      answeredQuestions: []
     };
   },
 
   methods: {
-    randomIntFromInterval(min, max) {
-      // min and max included
-      return Math.floor(Math.random() * (max - min + 1) + min);
-    },
-
     updateGamePlay(event) {
       this.answeredQuestions.push(event);
       this.currentQuestionIndex++;
@@ -76,11 +70,13 @@ export default {
     },
     quizFinished() {
       return this.currentQuestionIndex == this.questions.length;
+    },
+    numberOfQuestions: function() {
+      return this.$route.params.numberOfQuestions;
     }
   },
 
   mounted() {
-    this.numberOfQuestions = this.randomIntFromInterval(10, 20);
     this.currentQuestionIndex = 0;
     axios
       .get(`https://opentdb.com/api.php?amount=${this.numberOfQuestions}`)
