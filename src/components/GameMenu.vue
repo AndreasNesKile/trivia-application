@@ -1,7 +1,8 @@
 <template>
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center" no-gutters>
-      <v-card class="start-game-card" raised width="80%">
+      <v-card class="start-game-card" raised>
+        <v-alert v-show="invalidNumberOfQuestionsAlertText" color="red">Please pick a valid number!</v-alert>
         <v-card-title class="title justify-center">You want to play a game?</v-card-title>
         <v-card-text>
           <br />
@@ -37,21 +38,29 @@ export default {
   name: "game-menu",
   data() {
     return {
-      numberOfQuestions: 10
+      numberOfQuestions: 10,
+      invalidNumberOfQuestionsAlertText: ""
     };
   },
 
   computed: {
     setNumberOfQuestions: function() {
       return this.numberOfQuestions;
+    },
+    numberOfQuestionsIsValid: function() {
+      return this.numberOfQuestions > 9 && this.numberOfQuestions < 20;
     }
   },
   methods: {
     startQuiz() {
-      this.$router.push({
-        name: "quiz",
-        params: { numberOfQuestions: this.setNumberOfQuestions }
-      });
+      if (this.numberOfQuestionsIsValid) {
+        this.$router.push({
+          name: "quiz",
+          params: { numberOfQuestions: this.setNumberOfQuestions }
+        });
+      } else {
+        this.invalidNumberOfQuestionsAlertText = "Please choose a valid number";
+      }
     }
   }
 };

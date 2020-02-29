@@ -1,6 +1,8 @@
 # Trivia Quiz
 
-Welcome to the Trivia Quiz. This is a project that I have done in order to learn a little bit more about Vue.js and the component libarry Vuetify.
+Welcome to the Trivia Quiz. This is a project that I have done in order to learn a little bit more about Vue.js and the component library Vuetify.
+
+The questions are fetched from [Open Trivia Database](https://opentdb.com).
 
 In order to install and run the web application, follow the instructions underneath.
 
@@ -40,16 +42,4 @@ To run the project in development mode, simply run following:
 
 ```
 npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
 ```

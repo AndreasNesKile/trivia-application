@@ -1,4 +1,4 @@
-<template>
+<template v-if="isReady">
   <v-container class="fill height" v-if="questions.length > 0">
     <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
     <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
@@ -23,7 +23,8 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       countDown: 10,
-      answeredQuestions: []
+      answeredQuestions: [],
+      isReady: false
     };
   },
 
@@ -50,6 +51,7 @@ export default {
       if (!this.answeredQuestions[this.currentQuestionIndex]) {
         this.answeredQuestions.push({
           question: this.questions[this.currentQuestionIndex].question,
+          category: this.questions[this.currentQuestionIndex].category,
           options: [
             this.questions[this.currentQuestionIndex].correct_answer,
             ...this.questions[this.currentQuestionIndex].incorrect_answers
@@ -90,6 +92,7 @@ export default {
             );
           });
         }
+        this.isReady = true;
       })
       .catch(error => {
         console.log(error);

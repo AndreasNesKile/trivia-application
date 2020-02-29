@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar dark dense app class="red trivia-navbar">
+  <v-app-bar dark dense app class="red trivia-navbar" hide-on-scroll>
     <v-toolbar-title class="hidden-sm-and-down trivia-logo">Trivia Quiz</v-toolbar-title>
     <v-toolbar-items>
       <router-link to="/" class="router-link">

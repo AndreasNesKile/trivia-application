@@ -10,9 +10,9 @@
 
     <v-divider dark></v-divider>
     <br />
-    <v-btn class="primary">
-      <router-link class="router-link white--text" to="quiz">Play again</router-link>
-    </v-btn>
+    <router-link class="router-link white--text" to="/">
+      <v-btn class="primary">Play again</v-btn>
+    </router-link>
   </v-container>
 </template>
 
@@ -24,11 +24,6 @@ export default {
   components: {
     "quiz-results": QuizResults
   },
-  data() {
-    return {
-      questions: []
-    };
-  },
 
   computed: {
     setScore() {
@@ -39,16 +34,6 @@ export default {
     },
     setAnsweredQuestions() {
       return this.$route.params.answeredQuestions;
-    }
-  },
-
-  watch: {
-    answeredQuestions: function(newVal, oldVal) {
-      if (newVal === oldVal) {
-        return;
-      } else {
-        this.questions = this.$props.answeredQuestions;
-      }
     }
   }
 };

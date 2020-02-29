@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-row>
-      <v-col lg="12">
+      <v-col>
         <h4 v-html="question.category"></h4>
       </v-col>
     </v-row>
@@ -16,7 +16,6 @@
       <v-row>
         <v-col v-for="(answer,index) in answers" :key="index" xl="6" md="6" l="6" sm="12" xs="12">
           <v-card
-            :disabled="!isActive"
             class="quiz-card-container elevation-5 answer-card"
             :id="'answer-option-' + question"
             @click="sendAnswer($event)"
@@ -42,16 +41,15 @@ export default {
       answers: [],
       selectedAnswer: "",
       answerFromUser: {},
-      correctAnswer: "",
-      isActive: true
+      correctAnswer: ""
     };
   },
 
   methods: {
     sendAnswer(event) {
-      this.isActive = false;
       this.answerFromUser = {
         question: this.question.question,
+        category: this.question.category,
         options: this.answers,
         selectedAnswer: event.target.innerText,
         correctAnswer: this.correctAnswer,
@@ -80,7 +78,6 @@ export default {
       ];
       this.answers.sort();
       this.correctAnswer = this.$props.question.correct_answer;
-      this.isActive = true;
     }
   }
 };
