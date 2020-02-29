@@ -1,7 +1,11 @@
 <template v-if="isReady">
   <v-container class="fill height" v-if="questions.length > 0">
-    <v-progress-linear striped stream height="40px" :value="countDown * 10"></v-progress-linear>
-    <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
+    <v-row justify="center">
+      <v-col lg="6">
+        <v-progress-linear rounded striped stream height="10px" :value="countDown* 10"></v-progress-linear>
+        <quiz-question v-on:answer="updateGamePlay" :question="questions[currentQuestionIndex]" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
