@@ -41,7 +41,9 @@ export default {
       answers: [],
       selectedAnswer: "",
       answerFromUser: {},
-      correctAnswer: ""
+      correctAnswer: "",
+      questionNumber: 0,
+      currentQuestionNumber: 0
     };
   },
 

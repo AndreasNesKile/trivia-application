@@ -1,5 +1,16 @@
 <template v-if="isReady">
   <v-container class="fill height" v-if="questions.length > 0">
+    <v-row>
+      <v-col>
+        <v-progress-circular
+          :rotate="-90"
+          :size="100"
+          :width="20"
+          :value="(currentQuestionIndex * 10) + 10"
+          color="blue"
+        >{{ currentQuestionIndex + 1}} / {{ numberOfQuestions}}</v-progress-circular>
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col lg="6">
         <v-progress-linear rounded striped stream height="10px" :value="countDown* 10"></v-progress-linear>
@@ -75,7 +86,11 @@ export default {
       return this.countDown;
     },
     quizFinished() {
-      return this.currentQuestionIndex == this.questions.length;
+      return (
+        this.currentQuestionIndex == this.questions.length &&
+        this.answeredQuestions.length > 0 &&
+        this.answeredQuestions.length == this.numberOfQuestions
+      );
     },
     numberOfQuestions: function() {
       return this.$route.params.numberOfQuestions;
